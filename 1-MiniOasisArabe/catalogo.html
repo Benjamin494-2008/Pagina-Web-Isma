@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini Oasis Árabe | Catálogo</title>
+  <meta name="theme-color" content="#0d0b08">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold:   #c9a84c;
+      --gold-l: #e8c96a;
+      --gold-d: #8b6914;
+      --dark:   #0d0b08;
+      --dark2:  #1a1710;
+      --dark3:  #2a2318;
+      --cream:  #f5e9c8;
+      --muted:  #9a8c6e;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--dark);
+      color: var(--cream);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 17px;
+      min-height: 100vh;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(45deg,  transparent, transparent 36px, rgba(201,168,76,0.025) 36px, rgba(201,168,76,0.025) 37px),
+        repeating-linear-gradient(-45deg, transparent, transparent 36px, rgba(201,168,76,0.025) 36px, rgba(201,168,76,0.025) 37px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* HEADER */
+    header { position: relative; z-index: 10; text-align: center; padding: 36px 20px 28px; border-bottom: 1px solid rgba(201,168,76,0.2); }
+    .brand { font-family: 'Cinzel', serif; font-size: clamp(22px, 5vw, 36px); letter-spacing: 6px; color: var(--gold-l); animation: fadeDown 0.8s ease both; }
+    .brand-arabic { font-size: 16px; color: var(--gold-d); letter-spacing: 5px; margin-top: 4px; animation: fadeDown 0.8s ease 0.1s both; }
+    nav { margin-top: 20px; display: flex; justify-content: center; gap: 36px; flex-wrap: wrap; animation: fadeDown 0.8s ease 0.2s both; }
+    nav a { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 3px; color: var(--muted); text-decoration: none; transition: color 0.3s; }
+    nav a:hover, nav a.active { color: var(--gold); }
+
+    /* FILTROS */
+    .filters { position: relative; z-index: 1; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; padding: 32px 20px 16px; }
+    .filter-btn { background: transparent; border: 1px solid rgba(201,168,76,0.3); color: var(--muted); font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 2px; padding: 8px 20px; cursor: pointer; transition: all 0.25s; text-transform: uppercase; }
+    .filter-btn:hover, .filter-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.06); }
+
+    /* BUSCADOR */
+    .search-wrap { position: relative; z-index: 1; display: flex; justify-content: center; padding: 0 20px 32px; }
+    .search-wrap input { background: var(--dark2); border: 1px solid rgba(201,168,76,0.2); color: var(--cream); font-family: 'Cormorant Garamond', serif; font-size: 16px; padding: 10px 20px; width: min(420px, 100%); outline: none; transition: border-color 0.3s; letter-spacing: 1px; }
+    .search-wrap input::placeholder { color: var(--muted); font-style: italic; }
+    .search-wrap input:focus { border-color: rgba(201,168,76,0.6); }
+
+    /* GRILLA */
+    .catalog { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 2px; padding: 0 24px 100px; max-width: 1100px; margin: 0 auto; }
+
+    .product-card { background: var(--dark2); border: 1px solid rgba(201,168,76,0.08); overflow: hidden; transition: border-color 0.3s, transform 0.3s; animation: fadeUp 0.6s ease both; display: flex; flex-direction: column; }
+    .product-card:hover { border-color: rgba(201,168,76,0.35); transform: translateY(-3px); }
+    .product-card.agotado { opacity: 0.45; }
+    .product-card.agotado .btn-wa { pointer-events: none; opacity: 0.35; cursor: not-allowed; }
+
+    .card-img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; background: var(--dark3); }
+    .card-img-placeholder { width: 100%; aspect-ratio: 1; background: var(--dark3); display: flex; align-items: center; justify-content: center; font-size: 52px; color: rgba(201,168,76,0.2); }
+
+    .card-body { padding: 18px 18px 16px; flex: 1; }
+    .card-badge { display: inline-block; font-family: 'Cinzel', serif; font-size: 8px; letter-spacing: 2px; padding: 3px 10px; margin-bottom: 10px; border: 1px solid; }
+    .badge-disponible { color: #6aaf4a; border-color: #6aaf4a; background: rgba(106,175,74,0.08); }
+    .badge-agotado    { color: #c04a4a; border-color: #c04a4a; background: rgba(192,74,74,0.08); }
+    .badge-ultimas    { color: var(--gold); border-color: var(--gold); background: rgba(201,168,76,0.08); }
+
+    .card-arabic  { font-size: 18px; color: var(--gold); margin-bottom: 2px; }
+    .card-name    { font-family: 'Cinzel', serif; font-size: 13px; letter-spacing: 1px; color: var(--cream); margin-bottom: 6px; }
+    .card-cat     { font-size: 12px; color: var(--muted); font-style: italic; margin-bottom: 12px; }
+    .card-divider { height: 1px; background: rgba(201,168,76,0.15); margin-bottom: 12px; }
+    .card-price   { font-family: 'Cinzel', serif; font-size: 20px; color: var(--gold-l); letter-spacing: 1px; }
+    .card-price span { font-size: 11px; color: var(--muted); letter-spacing: 2px; margin-left: 4px; }
+
+    /* BOTÓN WA EN TARJETA */
+    .btn-wa {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 14px 16px;
+      margin-top: 16px;
+      background: rgba(37,211,102,0.07);
+      border: none;
+      border-top: 1px solid rgba(37,211,102,0.18);
+      color: #4ade80;
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.25s, color 0.25s, border-color 0.25s;
+    }
+    .btn-wa:hover {
+      background: #25d366;
+      color: #071a07;
+      border-top-color: #25d366;
+    }
+    .btn-wa svg { width: 15px; height: 15px; fill: currentColor; flex-shrink: 0; }
+
+    /* SIN RESULTADOS */
+    .no-results { position: relative; z-index: 1; text-align: center; padding: 60px 20px; color: var(--muted); font-style: italic; font-size: 18px; display: none; }
+
+    /* FOOTER */
+    footer { position: relative; z-index: 1; text-align: center; padding: 36px 20px; border-top: 1px solid rgba(201,168,76,0.15); color: var(--muted); font-size: 13px; }
+    footer strong { color: var(--gold); font-weight: 400; font-family: 'Cinzel', serif; letter-spacing: 2px; }
+
+    /* BOTÓN FLOTANTE WA */
+    .wa-float { position: fixed; bottom: 28px; right: 28px; z-index: 9999; display: flex; align-items: center; text-decoration: none; transition: transform 0.3s; filter: drop-shadow(0 4px 18px rgba(0,0,0,0.5)); }
+    .wa-float:hover { transform: translateY(-3px) scale(1.04); }
+    .wa-float-label { background: #25d366; color: #071a07; font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 2px; padding: 10px 16px 10px 14px; border-radius: 30px 0 0 30px; white-space: nowrap; max-width: 0; overflow: hidden; opacity: 0; transition: max-width 0.4s ease, opacity 0.3s ease; }
+    .wa-float:hover .wa-float-label { max-width: 200px; opacity: 1; }
+    .wa-float-circle { width: 56px; height: 56px; background: #25d366; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; animation: wa-pulse 2.5s ease-out infinite; }
+    .wa-float-circle svg { width: 28px; height: 28px; fill: white; }
+    @keyframes wa-pulse {
+      0%   { box-shadow: 0 0 0 0    rgba(37,211,102,0.55); }
+      70%  { box-shadow: 0 0 0 14px rgba(37,211,102,0); }
+      100% { box-shadow: 0 0 0 0    rgba(37,211,102,0); }
+    }
+
+
+    /* ── DOCK DE CONTACTO FLOTANTE ── */
+    .social-dock { position:fixed; bottom:28px; right:28px; z-index:9999; display:flex; flex-direction:column; align-items:flex-end; gap:10px; }
+    .dock-items { display:flex; flex-direction:column; align-items:flex-end; gap:10px; transition:opacity 0.3s, transform 0.3s; }
+    .social-dock.closed .dock-items { opacity:0; pointer-events:none; transform:translateY(12px); }
+    .social-dock.open   .dock-items { opacity:1; pointer-events:all;  transform:translateY(0); }
+    .dock-toggle { width:52px; height:52px; border-radius:50%; background:var(--gold); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--dark); transition:transform 0.3s; box-shadow:0 4px 18px rgba(0,0,0,0.4); animation:dock-pulse 3s ease-out infinite; }
+    .dock-toggle:hover { transform:scale(1.08); }
+    .dock-toggle svg { width:22px; height:22px; }
+    .dock-item { display:flex; align-items:center; text-decoration:none; filter:drop-shadow(0 3px 10px rgba(0,0,0,0.4)); transition:transform 0.25s; }
+    .dock-item:hover { transform:translateX(-4px); }
+    .dock-label { font-family:'Cinzel',serif; font-size:9px; letter-spacing:2px; padding:10px 14px; border-radius:20px 0 0 20px; white-space:nowrap; max-width:0; overflow:hidden; opacity:0; transition:max-width 0.35s ease, opacity 0.25s ease; }
+    .dock-item:hover .dock-label { max-width:160px; opacity:1; }
+    .dock-icon { width:46px; height:46px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .dock-icon svg { width:22px; height:22px; }
+    .dock-wa   .dock-icon  { background:#25d366; }
+    .dock-wa   .dock-icon svg { fill:white; }
+    .dock-wa   .dock-label { background:#25d366; color:#071a07; }
+    .dock-ig   .dock-icon  { background:#e1306c; }
+    .dock-ig   .dock-icon svg { fill:white; }
+    .dock-ig   .dock-label { background:#e1306c; color:white; }
+    .dock-mail .dock-icon  { background:var(--gold); }
+    .dock-mail .dock-icon svg { stroke:var(--dark); fill:none; }
+    .dock-mail .dock-label { background:var(--gold); color:var(--dark); }
+    @keyframes dock-pulse { 0%{box-shadow:0 0 0 0 rgba(201,168,76,0.5);} 70%{box-shadow:0 0 0 12px rgba(201,168,76,0);} 100%{box-shadow:0 0 0 0 rgba(201,168,76,0);} }
+    @media(max-width:500px){ .social-dock{bottom:16px;right:16px;} .dock-label{display:none;} }
+
+    /* ANIMACIONES */
+    @keyframes fadeDown { from { opacity:0; transform:translateY(-16px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeUp   { from { opacity:0; transform:translateY(20px);  } to { opacity:1; transform:translateY(0); } }
+
+    @media (max-width: 500px) {
+      .wa-float { bottom: 18px; right: 18px; }
+      .wa-float-label { display: none; }
+      .catalog { padding: 0 12px 100px; }
+      nav { gap: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="brand">MINI OASIS</div>
+  <div class="brand-arabic">✦ أريج عربي ✦</div>
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="catalogo.html" class="active">Catálogo</a>
+    <a href="#contacto">Contacto</a>
+  </nav>
+</header>
+
+<div class="filters">
+  <button class="filter-btn active" onclick="filtrar('todos',this)">Todos</button>
+  <button class="filter-btn" onclick="filtrar('oud',this)">Oud</button>
+  <button class="filter-btn" onclick="filtrar('musk',this)">Musk</button>
+  <button class="filter-btn" onclick="filtrar('floral',this)">Floral</button>
+  <button class="filter-btn" onclick="filtrar('oriental',this)">Oriental</button>
+</div>
+
+<div class="search-wrap">
+  <input type="text" id="buscador" placeholder="Buscar fragancia..." oninput="buscar()">
+</div>
+
+<div class="catalog" id="catalogo"></div>
+<div class="no-results" id="sin-resultados">No se encontraron fragancias 🌙</div>
+
+<footer id="contacto">
+  <strong>MINI OASIS ÁRABE</strong><br><br>
+  Instagram: <strong>@mini.oasis.arabe</strong> &nbsp;·&nbsp; WhatsApp: <strong>+54 9 261 400-0000</strong>
+  <br><br>© 2025 Mini Oasis Árabe · Argentina
+</footer>
+
+<script>
+/* ============================================================
+   ✦ CAMBIÁ EL NÚMERO DE WHATSAPP ACÁ
+   Formato: 549 + código de área sin 0 + número sin 15
+   Ejemplo Mendoza: 5492614000000
+   ============================================================ */
+const WA_NUMERO = '5492612455195'; // ← cambiá este número
+
+/* ============================================================
+   ✦ PRODUCTOS — EDITÁ ESTA LISTA PARA ACTUALIZAR EL CATÁLOGO
+
+   - nombre:     nombre en español
+   - arabic:     en árabe (dejá "" si no querés)
+   - categoria:  "oud" | "musk" | "floral" | "oriental"
+   - precio:     número sin el $
+   - stock:      "disponible" | "ultimas" | "agotado"
+   - imagen:     ruta de la foto, ej: "fotos/oud-royal.jpg"
+                 dejá "" si todavía no tenés foto
+   ============================================================ */
+const PRODUCTOS = [
+  { nombre:'9pm Rebel', arabic:'30ml', categoria:'', precio:9000, stock:'agotado', imagen:'fotos/9pm_Rebel.jpg' },
+  { nombre:'Al Haramain Blue', arabic:'35ml', categoria:'', precio:6000, stock:'ultimas', imagen:'fotos/Al_Haramain_Blue.jpg' },
+  { nombre:'Al Haramain Rouge', arabic:'35ml', categoria:'', precio:6000, stock:'ultimas', imagen:'fotos/Al_Haramain_Rouge.jpg' },
+  { nombre:'Asad Burbon', arabic:'35ml',  categoria:'', precio:6000, stock:'ultimas', imagen:'fotos/Asad_Burbon.jpg' },
+  { nombre:'Asad', arabic:'30ml',  categoria:'', precio:9000, stock:'agotado', imagen:'fotos/Asad.jpg' },
+  { nombre:'Asad Tubito', arabic:'35ml', categoria:'', precio:6000, stock:'ultimas', imagen:'fotos/Asad_Tubito.jpg' },
+  { nombre:'Asad Zanzibar', arabic:'30ml', categoria:'', precio:9000, stock:'ultimas', imagen:'fotos/Asad_Zanzibar.jpg' },
+  { nombre:'Asad Zanzibar Tubito', arabic:'35ml', categoria:'', precio:6000, stock:'ultimas', imagen:'fotos/Asad_Zanzibar_Tubito.jpg' },
+  { nombre:'Baccarat Rouge 540', arabic:'35ml', categoria:'', precio:6000, stock:'ultimas', imagen:'fotos/Baccarat_Rouge_540.jpg' },
+  { nombre:'Club De Nuit Woman', arabic:'35ml', categoria:'', precio:6000, stock:'ultimas', imagen:'fotos/Club_De_Nuit_Woman.jpg'},
+  { nombre:'Khamrha Dukhan', arabic:'30ml', categoria:'', precio:9000, stock:'ultimas', imagen:'fotos/Khamrha_Dukhan.jpg'},
+  { nombre:'Khamrha Qahwa', arabic:'30ml', categoria:'', precio:9000, stock:'ultimas', imagen:'fotos/Khamrha_Qahwa.jpg'},
+  { nombre:'Khamrha Qahwa Tubito', arabic:'35ml', categoria:'', precio:6000, stock:'ultimas', imagen:'fotos/Khamrha_Qahwa_Tubito.jpg'},
+  { nombre:'Sakeena', arabic:'35ml', categoria:'', precio:6000, stock:'ultimas', imagen:'fotos/Sakeena.jpg'},
+  { nombre:'Yara Candy', arabic:'35ml', categoria:'', precio:6000, stock:'ultimas', imagen:'fotos/Yara_Candy.jpg'},
+  { nombre:'Yara Tous', arabic:'35ml', categoria:'', precio:6000, stock:'ultimas', imagen:'fotos/Yara_Tous.jpg'},
+];
+
+/* ── NO TOCAR NADA DE ACÁ PARA ABAJO ── */
+
+const EMOJIS = { oud:'🌲', musk:'🌙', floral:'🌸', oriental:'✨' };
+const LABELS  = {
+  disponible: ['badge-disponible','DISPONIBLE'],
+  ultimas:    ['badge-ultimas','ÚLTIMAS UNIDADES'],
+  agotado:    ['badge-agotado','AGOTADO'],
+};
+const WA_SVG = `<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
+
+let filtroActivo = 'todos';
+
+function waLink(nombre, precio) {
+  const txt = encodeURIComponent(
+    `Hola Mini Oasis 🌙 Quiero consultar por el perfume *${nombre}* ($${new Intl.NumberFormat('es-AR').format(precio)} ARS). ¿Está disponible?`
+  );
+  return `https://wa.me/${WA_NUMERO}?text=${txt}`;
+}
+
+function renderCatalogo(lista) {
+  const cont  = document.getElementById('catalogo');
+  const noRes = document.getElementById('sin-resultados');
+  if (!lista.length) { cont.innerHTML = ''; noRes.style.display = 'block'; return; }
+  noRes.style.display = 'none';
+  cont.innerHTML = lista.map((p, i) => {
+    const [cls, lbl] = LABELS[p.stock] || LABELS.disponible;
+    const precio     = new Intl.NumberFormat('es-AR').format(p.precio);
+    const img        = p.imagen
+      ? `<img class="card-img" src="${p.imagen}" alt="${p.nombre}" loading="lazy">`
+      : `<div class="card-img-placeholder">${EMOJIS[p.categoria]||'🌿'}</div>`;
+    const btnTxt = p.stock === 'agotado' ? 'Sin stock' : 'Consultar por WhatsApp';
+    return `
+      <div class="product-card ${p.stock==='agotado'?'agotado':''}" style="animation-delay:${i*.05}s">
+        ${img}
+        <div class="card-body">
+          <span class="card-badge ${cls}">${lbl}</span>
+          ${p.arabic?`<div class="card-arabic">${p.arabic}</div>`:''}
+          <div class="card-name">${p.nombre}</div>
+          <div class="card-cat">${p.categoria.charAt(0).toUpperCase()+p.categoria.slice(1)}</div>
+          <div class="card-divider"></div>
+          <div class="card-price">$${precio}<span>ARS</span></div>
+        </div>
+        <a class="btn-wa" href="${waLink(p.nombre,p.precio)}" target="_blank" rel="noopener">
+          ${WA_SVG} ${btnTxt}
+        </a>
+      </div>`;
+  }).join('');
+}
+
+function filtrar(cat, btn) {
+  filtroActivo = cat;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('buscador').value = '';
+  aplicarFiltros();
+}
+
+function buscar() {
+  filtroActivo = 'todos';
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.filter-btn').classList.add('active');
+  aplicarFiltros();
+}
+
+function aplicarFiltros() {
+  const q = document.getElementById('buscador').value.toLowerCase().trim();
+  let lista = PRODUCTOS;
+  if (filtroActivo !== 'todos') lista = lista.filter(p => p.categoria === filtroActivo);
+  if (q) lista = lista.filter(p =>
+    p.nombre.toLowerCase().includes(q) ||
+    p.arabic.toLowerCase().includes(q) ||
+    p.categoria.toLowerCase().includes(q)
+  );
+  renderCatalogo(lista);
+}
+
+renderCatalogo(PRODUCTOS);
+</script>
+
+  <!-- ✦ DATOS DE CONTACTO — EDITÁ SOLO ESTAS 3 LÍNEAS -->
+  <script>
+    const CONTACTO = {
+      whatsapp:  '5492612455195',
+      instagram: 'isma.rivas2006',
+      email:     'ismarivas494@gmail.com'
+    };
+    document.getElementById('dockWa').href =
+      'https://wa.me/' + CONTACTO.whatsapp + '?text=' + encodeURIComponent('Hola Mini Oasis 🌙 quiero consultar por una fragancia');
+    document.getElementById('dockIg').href =
+      'https://instagram.com/' + CONTACTO.instagram;
+    document.getElementById('dockMail').href =
+      'mailto:' + CONTACTO.email;
+    function toggleDock() {
+      const d = document.getElementById('socialDock');
+      d.classList.toggle('open');
+      d.classList.toggle('closed');
+    }
+    document.getElementById('socialDock').classList.add('closed');
+  </script>
+
+  <div class="social-dock" id="socialDock">
+    <div class="dock-items">
+      <a class="dock-item dock-wa"   id="dockWa"   target="_blank" rel="noopener" aria-label="WhatsApp">
+        <span class="dock-label">WhatsApp</span>
+        <span class="dock-icon"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></span>
+      </a>
+      <a class="dock-item dock-ig"   id="dockIg"   target="_blank" rel="noopener" aria-label="Instagram">
+        <span class="dock-label">Instagram</span>
+        <span class="dock-icon"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></span>
+      </a>
+      <a class="dock-item dock-mail" id="dockMail" aria-label="Email">
+        <span class="dock-label">Email</span>
+        <span class="dock-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+      </a>
+    </div>
+    <button class="dock-toggle" onclick="toggleDock()" aria-label="Contacto">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    </button>
+  </div>
+
+</body>
+</html>
